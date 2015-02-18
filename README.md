@@ -54,6 +54,8 @@ There are two methods to solve multi-classification problem:
 
 In order to use k-fold cross validation, I will let open source tool do it. Scikit-learn is a good choice.
 
+### How to do grid search for hyper-parameters
+
 ### How to choose open source tools
 
 - Spark/MLlib is the most familiar tool of me, but it is too heavy and no necessary in the scenario;
@@ -68,13 +70,105 @@ In order to use k-fold cross validation, I will let open source tool do it. Scik
 
 `sudo apt-get install python-sklearn`
 
+I try to use sklearn, with its svm and logistic regression, and get good results.
+
+For svm, I get
+
+> \>\>\> print(metrics.classification_report(expected, predicted))
+
+>             precision    recall  f1-score   support
+
+>         0.0       1.00      1.00      1.00       190
+
+>         1.0       0.98      0.99      0.99       194
+
+>         2.0       0.99      1.00      0.99       186
+
+>         3.0       0.99      0.96      0.97       192
+
+>         4.0       0.99      0.99      0.99       202
+
+>         5.0       0.98      0.99      0.99       194
+
+>         6.0       0.99      0.99      0.99       184
+
+>         7.0       0.99      0.99      0.99       188
+
+>         8.0       0.99      0.99      0.99       201
+
+>         9.0       0.97      0.98      0.98       181
+
+> avg / total       0.99      0.99      0.99      1912
+
+For logistic regression, I get
+
+> >>> print(metrics.classification_report(expected, lrpredicted))
+
+>              precision    recall  f1-score   support
+
+>         0.0       0.99      1.00      0.99       190
+
+>         1.0       0.93      0.95      0.94       194
+
+>         2.0       0.98      0.97      0.98       186
+
+>         3.0       0.98      0.93      0.96       192
+
+>         4.0       0.98      0.97      0.97       202
+
+>         5.0       0.97      0.97      0.97       194
+
+>         6.0       0.98      0.99      0.98       184
+
+>         7.0       0.99      0.99      0.99       188
+
+>         8.0       0.93      0.93      0.93       201
+
+>         9.0       0.91      0.94      0.93       181
+
+> avg / total       0.96      0.96      0.96      1912
+
+Code snippts as follows:
+
+```python
+import numpy
+from sklearn import datasets, svm, metrics
+from sklearn.linear_regression import LogisticRegression
+
+digits = numpy.loadtxt(fname="~/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+# Create a classifier: a support vector classifier
+classifier = svm.SVC(gamma=0.001)
+
+# Create a logistic regression classifier
+lr = LogisticRegression()
+
+# We learn the digits on the first half of the digits
+classifier.fit(data[:n_samples / 2], target[:n_samples / 2])
+
+# learn with lr
+lr.fit(data[:n_samples / 2], target[:n_samples / 2])
+
+# Now predict the value of the digit on the second half:
+expected = digits.target[n_samples / 2:]
+predicted = classifier.predict(data[n_samples / 2:])
+lrpredicted = lr.predict(data[n_samples / 2:])
+
+print(metrics.classification_report(expected, predicted)))
+print(metrics.classification_report(expected, lrpredicted)))
+```
+
 ### Install MDP
 
 `sudo aptitude install python-mdp`
 
 To prevent from the warning of the following
 
-> >>> import mdp
+> \>\>\> import mdp
 
 > /usr/lib/python2.7/dist-packages/sklearn/pls.py:7: DeprecationWarning: This module has been moved to cross_decomposition and will be removed in 0.16 "removed in 0.16", DeprecationWarning)
 
@@ -110,3 +204,5 @@ os.environ['MDP_DISABLE_SKLEARN']='yes'
 7. [Modular Toolkit for Data Processing](http://mdp-toolkit.sourceforge.net/documentation.html)
 
 8. [Scikit-learn document](http://scikit-learn.org/stable/)
+
+9. [Handwritten digits classification with MDP and scikits.learn](http://mdp-toolkit.sourceforge.net/examples/scikits_learn/digit_classification.html)
