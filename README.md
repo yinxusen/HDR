@@ -7,15 +7,24 @@
 `awk -F "," '{print $65}' optdigits.tra | sort -n | uniq -c`
 
 > 376 0
-  389 1
-  380 2
-  389 3
-  387 4
-  376 5
-  377 6
-  387 7
-  380 8
-  382 9
+
+> 389 1
+
+> 380 2
+
+> 389 3
+
+> 387 4
+
+> 376 5
+
+> 377 6
+
+> 387 7
+
+> 380 8
+
+> 382 9
 
 It looks good, the distribution of 0-9 digits looks like a uniform distribution.
 
@@ -43,7 +52,7 @@ There are two methods to solve multi-classification problem:
 
 ### How to do ETL of the dataset
 
-In order to use k-fold cross validation, 
+In order to use k-fold cross validation, I will let open source tool do it. Scikit-learn is a good choice.
 
 ### How to choose open source tools
 
@@ -54,6 +63,14 @@ In order to use k-fold cross validation,
 - LibSVM and libLinear are much more fast than scikit-learn, but for a demo project, I prefer python, because the scale-out and scale-up capalibities are not my first consideration.
 
 ## Details
+
+### Install scikit-learn
+
+`sudo apt-get install python-sklearn`
+
+### Install MDP
+
+`sudo aptitude install python-mdp`
 
 ### Logistic Regression
 
