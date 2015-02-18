@@ -72,6 +72,23 @@ In order to use k-fold cross validation, I will let open source tool do it. Scik
 
 `sudo aptitude install python-mdp`
 
+To prevent from the warning of the following
+
+> >>> import mdp
+
+> /usr/lib/python2.7/dist-packages/sklearn/pls.py:7: DeprecationWarning: This module has been moved to cross_decomposition and will be removed in 0.16 "removed in 0.16", DeprecationWarning)
+
+We need to force import mdp itself, other than the add-in package of scikit-learn.
+
+`export MDP_DISABLE_SKLEARN=yes`
+
+or 
+
+```python
+import os
+os.environ['MDP_DISABLE_SKLEARN']='yes'
+```
+
 ### Logistic Regression
 
 ### SVM
