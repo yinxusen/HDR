@@ -20,7 +20,7 @@ flow = mdp.Flow([mdp.nodes.PCANode(output_dim=25, dtype='f'),
     mdp.nodes.PolynomialExpansionNode(3),
     mdp.nodes.PCANode(output_dim=0.99),
     mdp.nodes.FDANode(output_dim=9),
-    mdp.nodes.SVCScikitsLearnNode(kernel='rbf')], verbose=True)
+    mdp.nodes.LogisticRegressionScikitsLearnNode()], verbose=True)
 
 flow.train([train_data, None, train_data, train_data_with_labels, train_data_with_labels])
 

@@ -247,6 +247,34 @@ prediction = flow(test_data)
 print metrics.classification_report(test_labels, prediction)
 ```
 
+To testify my assumption, I substitude `SVCScikitLearnNode` with `LogisticRegressionScikitLearnNode`, and get similar result:
+
+>             precision    recall  f1-score   support
+
+>         0.0       1.00      0.99      1.00       130
+
+>         1.0       0.98      0.98      0.98       130
+
+>         2.0       1.00      1.00      1.00       119
+
+>         3.0       0.98      0.99      0.99       129
+
+>         4.0       0.99      0.98      0.99       130
+
+>         5.0       0.98      1.00      0.99       128
+
+>         6.0       0.99      1.00      1.00       124
+
+>         7.0       0.99      0.98      0.99       126
+
+>         8.0       0.99      0.98      0.98       139
+
+>         9.0       0.99      0.98      0.99       120
+
+> avg / total       0.99      0.99      0.99      1275
+
+So, in the hand-written digits recognition scenario, logistic regression with some feature expansion and transformation can compete SVM.
+
 ### Logistic Regression
 
 ### SVM
