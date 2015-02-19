@@ -606,7 +606,7 @@ From random forest, I can get my best score here:
 
 ### K Nearest Neighbors
 
-
+Try to use a non-linear embedding method before knn, but barely no promption.
 
 ## References
 

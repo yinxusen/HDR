@@ -2,20 +2,20 @@ import numpy
 from sklearn import metrics
 from sklearn.grid_search import GridSearchCV
 from sklearn.pipeline import Pipeline
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
 n_samples = len(digits)
 
-data = digits[:,:-1]
+data = digits[:,:-1] / 16.0
 target = digits[:,-1]
 
 param_grid = {
-    'rf__n_estimators': [40, 50, 60, 70, 80, 90]
+    'knn__weights': ['uniform', 'distance']
 }
 
 steps = [
-    ('rf', RandomForestClassifier())
+    ('knn', KNeighborsClassifier())
 ]
 
 pipeline = Pipeline(steps)
