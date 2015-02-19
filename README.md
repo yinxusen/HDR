@@ -277,7 +277,224 @@ So, in the hand-written digits recognition scenario, logistic regression with so
 
 ### Logistic Regression
 
+Add k-fold cross validation and grid search in lr. Result:
+
+> Best score: 0.964
+
+> Best parameters set:
+
+> {'C': 0.1, 'intercept_scaling': 1, 'fit_intercept': True, 'penalty': 'l2', 'random_state': None, 'dual': False, 'tol': 0.0001, 'class_weight': None}
+
+>              precision    recall  f1-score   support
+
+>         0.0       1.00      1.00      1.00       130
+
+>         1.0       0.93      0.95      0.94       130
+
+>         2.0       0.99      0.93      0.96       119
+
+>         3.0       0.96      0.97      0.97       129
+
+>         4.0       0.98      0.95      0.96       130
+
+>         5.0       0.97      0.99      0.98       128
+
+>         6.0       0.99      0.99      0.99       124
+
+>         7.0       0.98      0.98      0.98       126
+
+>         8.0       0.91      0.92      0.91       139
+
+>         9.0       0.94      0.94      0.94       120
+
+> avg / total       0.96      0.96      0.96      1275
+
+It looks better than the previous LR result.
+
+Code snippt:
+
+```python
+mport numpy
+from sklearn import datasets, svm, metrics
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+
+digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+param_grid = [
+    {'penalty': ['l1', 'l2'], 'C': [0.1, 1.0, 10.0, 100.0]}
+]
+
+# Create a classifier: a support vector classifier
+classifier = LogisticRegression()
+
+grid_search = GridSearchCV(classifier, param_grid, n_jobs = -1, verbose = 1, cv = 5)
+
+n_trains = n_samples / 3 * 2
+
+# We learn the digits on the first half of the digits
+grid_search.fit(data[:n_trains], target[:n_trains])
+
+print("Best score: %0.3f" % grid_search.best_score_)
+print("Best parameters set:")
+best_parameters = grid_search.best_estimator_.get_params()
+print best_parameters
+
+# Now predict the value of the digit on the second half:
+expected = target[n_trains:]
+predicted = grid_search.best_estimator_.predict(data[n_trains:])
+
+print(metrics.classification_report(expected, predicted))mport numpy
+from sklearn import datasets, svm, metrics
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+
+digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+param_grid = [
+    {'penalty': ['l1', 'l2'], 'C': [0.1, 1.0, 10.0, 100.0]}
+]
+
+# Create a classifier: a support vector classifier
+classifier = LogisticRegression()
+
+grid_search = GridSearchCV(classifier, param_grid, n_jobs = -1, verbose = 1, cv = 5)
+
+n_trains = n_samples / 3 * 2
+
+# We learn the digits on the first half of the digits
+grid_search.fit(data[:n_trains], target[:n_trains])
+
+print("Best score: %0.3f" % grid_search.best_score_)
+print("Best parameters set:")
+best_parameters = grid_search.best_estimator_.get_params()
+print best_parameters
+
+# Now predict the value of the digit on the second half:
+expected = target[n_trains:]
+predicted = grid_search.best_estimator_.predict(data[n_trains:])
+
+print(metrics.classification_report(expected, predicted))mport numpy
+from sklearn import datasets, svm, metrics
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+
+digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+param_grid = [
+    {'penalty': ['l1', 'l2'], 'C': [0.1, 1.0, 10.0, 100.0]}
+]
+
+# Create a classifier: a support vector classifier
+classifier = LogisticRegression()
+
+grid_search = GridSearchCV(classifier, param_grid, n_jobs = -1, verbose = 1, cv = 5)
+
+n_trains = n_samples / 3 * 2
+
+# We learn the digits on the first half of the digits
+grid_search.fit(data[:n_trains], target[:n_trains])
+
+print("Best score: %0.3f" % grid_search.best_score_)
+print("Best parameters set:")
+best_parameters = grid_search.best_estimator_.get_params()
+print best_parameters
+
+# Now predict the value of the digit on the second half:
+expected = target[n_trains:]
+predicted = grid_search.best_estimator_.predict(data[n_trains:])
+
+print(metrics.classification_report(expected, predicted))
+```
+
 ### SVM
+
+Let's add k-fold cross validation and grid search in SVM. Here is the result:
+
+> Best score: 0.990
+
+> Best parameters set:
+
+> {'kernel': 'rbf', 'C': 10, 'verbose': False, 'probability': False, 'degree': 3, 'shrinking': True, 'max_iter': -1, 'random_state': None, 'tol': 0.001, 'cache_size': 200, 'coef0': 0.0, 'gamma': 0.001, 'class_weight': None}
+
+>              precision    recall  f1-score   support
+
+>         0.0       1.00      1.00      1.00       130
+
+>         1.0       0.98      0.98      0.98       130
+
+>         2.0       1.00      1.00      1.00       119
+
+>         3.0       0.99      0.98      0.99       129
+
+>         4.0       0.98      0.99      0.99       130
+
+>         5.0       0.99      1.00      1.00       128
+
+>         6.0       0.99      0.99      0.99       124
+
+>         7.0       0.99      0.98      0.99       126
+
+>         8.0       0.99      0.99      0.99       139
+
+>         9.0       0.98      0.99      0.99       120
+
+> avg / total       0.99      0.99      0.99      1275
+
+Code snippt:
+
+```python
+import numpy
+from sklearn import datasets, svm, metrics
+from sklearn.grid_search import GridSearchCV
+
+digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+param_grid = [
+    {'C': [1, 10, 100, 1000], 'kernel': ['linear']},
+    {'C': [1, 10, 100, 1000], 'gamma': [0.001, 0.0001], 'kernel': ['rbf']},
+]
+
+# Create a classifier: a support vector classifier
+classifier = svm.SVC()
+
+grid_search = GridSearchCV(classifier, param_grid, n_jobs = -1, verbose = 1, cv = 5)
+
+n_trains = n_samples / 3 * 2
+
+# We learn the digits on the first half of the digits
+grid_search.fit(data[:n_trains], target[:n_trains])
+
+print("Best score: %0.3f" % grid_search.best_score_)
+print("Best parameters set:")
+best_parameters = grid_search.best_estimator_.get_params()
+print best_parameters
+
+# Now predict the value of the digit on the second half:
+expected = target[n_trains:]
+predicted = grid_search.best_estimator_.predict(data[n_trains:])
+
+print(metrics.classification_report(expected, predicted))
+```
+
+### SVM / LR + GridSearch + CV + Feature Engineering pipeline
+
 
 ## References
 
