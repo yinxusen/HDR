@@ -495,6 +495,118 @@ print(metrics.classification_report(expected, predicted))
 
 ### SVM / LR + GridSearch + CV + Feature Engineering pipeline
 
+### Neural network
+
+With the help of RBM and grid cv, I can get the following result on LR:
+
+> Best score: 0.955
+
+> Best parameters set:
+
+> {'rbm1__batch_size': 10, 'lr__dual': False, 'rbm1__verbose': False, 'rbm1__n_iter': 10, 'rbm1': BernoulliRBM(batch_size=10, learning_rate=0.1, n_components=36, n_iter=10,
+
+>        random_state=None, verbose=False), 'rbm1__n_components': 36, 'lr__tol': 0.0001, 'lr__class_weight': None, 'lr': LogisticRegression(C=100, class_weight=None, dual=False, fit_intercept=True,
+
+>           intercept_scaling=1, penalty='l1', random_state=None, tol=0.0001), 'rbm1__learning_rate': 0.1, 'rbm1__random_state': None, 'lr__fit_intercept': True, 'lr__penalty': 'l1', 'lr__random_state': None, 'lr__intercept_scaling': 1, 'lr__C': 100}
+
+>              precision    recall  f1-score   support
+
+>         0.0       0.98      1.00      0.99       130
+
+>         1.0       0.98      0.96      0.97       130
+
+>         2.0       0.99      0.95      0.97       119
+
+>         3.0       0.91      0.94      0.92       129
+
+>         4.0       0.99      0.97      0.98       130
+
+>         5.0       0.93      0.96      0.95       128
+
+>         6.0       0.98      0.97      0.97       124
+
+>         7.0       0.92      0.95      0.93       126
+
+>         8.0       0.90      0.93      0.91       139
+
+>         9.0       0.90      0.83      0.87       120
+
+> avg / total       0.95      0.95      0.95      1275
+
+It is not very exciting, but it is a good solution. How about we scale up the network an use different grid of parameters? It is worth to try.
+
+Code snippt:
+
+```python
+param_grid = {
+    'rbm1__n_components': [36, 25, 16],
+    'lr__penalty': ['l2', 'l1'],
+    'lr__C': [1, 10, 100]
+}
+
+steps = [
+    ('rbm1', BernoulliRBM()), 
+    ('lr', LogisticRegression())
+]
+
+pipeline = Pipeline(steps)
+
+grid_search = GridSearchCV(pipeline, param_grid, n_jobs = -1, verbose = 1, cv = 3)
+
+n_trains = n_samples / 3 * 2
+
+# We learn the digits on the first half of the digits
+grid_search.fit(data[:n_trains], target[:n_trains])
+```
+
+### Random forest
+
+It seems that the '9' is always hard to tell than '0'. How about random forest?
+
+From random forest, I can get my best score here:
+
+> Best score: 0.972
+
+> Best parameters set:
+
+> {'rf__bootstrap': True, 'rf__max_depth': None, 'rf__n_estimators': 90, 'rf__verbose': 0, 'rf__criterion': 'gini', 'rf__min_density': None, 'rf__min_samples_split': 2, 'rf__compute_importances': None, 'rf': RandomForestClassifier(bootstrap=True, compute_importances=None,
+
+>             criterion='gini', max_depth=None, max_features='auto',
+
+>             min_density=None, min_samples_leaf=1, min_samples_split=2,
+
+>             n_estimators=90, n_jobs=1, oob_score=False, random_state=None,
+
+>             verbose=0), 'rf__max_features': 'auto', 'rf__n_jobs': 1, 'rf__random_state': None, 'rf__oob_score': False, 'rf__min_samples_leaf': 1}
+
+>              precision    recall  f1-score   support
+
+>         0.0       0.99      0.99      0.99       130
+
+>         1.0       0.98      0.98      0.98       130
+
+>         2.0       1.00      0.98      0.99       119
+
+>         3.0       0.95      0.97      0.96       129
+
+>         4.0       0.98      0.99      0.99       130
+
+>         5.0       0.98      0.99      0.98       128
+
+>         6.0       0.98      0.99      0.99       124
+
+>         7.0       0.98      0.98      0.98       126
+
+>         8.0       0.99      0.97      0.98       139
+
+>         9.0       0.96      0.93      0.94       120
+
+> avg / total       0.98      0.98      0.98      1275
+
+
+### K Nearest Neighbors
+
+
 
 ## References
 
