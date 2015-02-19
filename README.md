@@ -102,7 +102,7 @@ For svm, I get
 
 For logistic regression, I get
 
-> >>> print(metrics.classification_report(expected, lrpredicted))
+> \>\>\> print(metrics.classification_report(expected, lrpredicted))
 
 >              precision    recall  f1-score   support
 
@@ -181,6 +181,70 @@ or
 ```python
 import os
 os.environ['MDP_DISABLE_SKLEARN']='yes'
+```
+
+So, let's try something of the **flow**, I love this kind of **pipeline**. Here is the result:
+
+>           precision    recall  f1-score   support
+
+>         0.0       1.00      0.99      1.00       130
+
+>         1.0       0.99      0.98      0.98       130
+
+>         2.0       1.00      0.99      1.00       119
+
+>         3.0       0.98      1.00      0.99       129
+
+>         4.0       0.99      0.98      0.99       130
+
+>         5.0       0.99      1.00      1.00       128
+
+>         6.0       0.99      1.00      1.00       124
+
+>         7.0       0.99      0.98      0.99       126
+
+>         8.0       0.97      0.99      0.98       139
+
+>         9.0       0.98      0.98      0.98       120
+
+> avg / total       0.99      0.99      0.99      1275
+
+We can see that it is even better than the former SVM result.
+
+Here is the code snippt:
+
+```python
+import mdp
+import numpy
+from sklearn import metrics
+
+digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
+n_samples = len(digits)
+
+data = digits[:,:-1]
+target = digits[:,-1]
+
+n_trains = n_samples / 3 * 2
+
+train_data = [data[:n_trains, :]]
+train_data_with_labels = [(data[:n_trains, :], target[:n_trains])]
+
+test_data = data[n_trains:, :]
+test_labels = target[n_trains]
+
+flow = mdp.Flow([mdp.nodes.PCANode(output_dim=25, dtype='f'),
+    mdp.nodes.PolynomialExpansionNode(3),
+    mdp.nodes.PCANode(output_dim=0.99),
+    mdp.nodes.FDANode(output_dim=9),
+    mdp.nodes.SVCScikitsLearnNode(kernel='rbf')], verbose=True)
+
+flow.train([train_data, None, train_data, train_data_with_labels, train_data_with_labels])
+
+flow[-1].execute = flow[-1].label
+
+prediction = flow(test_data)
+
+print metrics.classification_report(test_labels, prediction)
 ```
 
 ### Logistic Regression
