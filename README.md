@@ -1,4 +1,4 @@
-# Task: Classification of hand-written digits
+# Classification of Handwritten Digits
 
 ## Summary
 
@@ -28,7 +28,7 @@ I put the results as follows, and I will explain them in detail in the following
 
 ## Some statistics
 
-### Get the distribution of 0-9 samples
+### The distribution of 0-9 samples
 
 `awk -F "," '{print $65}' optdigits.tra | sort -n | uniq -c`
 
@@ -52,15 +52,13 @@ I put the results as follows, and I will explain them in detail in the following
 
 > 382 9
 
-It looks good, the distribution of 0-9 digits looks like a uniform distribution.
+It looks good that the distribution of 0-9 digits looks like a uniform distribution.
 
-For hand-written digits classification, the most common way is **Logistic Regression** and **SVM**.
+## Methodology
 
-## Some inital thoughts (Methodology)
+### How to choose models
 
-### How to choose model
-
-This dataset is quite small, so I will not try to use some **heavy** classifiers such as **Deep Neural Network**, which could cause over-fitting and cannot perform well result on test set. But, the traditional **Shallow Neural Network** is a good idea, say, a network with 3 layers of neurals.
+This dataset is quite small, so I will not try to use some **heavy** classifiers such as **Deep Neural Network**, which could cause over-fitting and cannot perform well on test set. But, the traditional **Shallow Neural Network** is a good idea, say, a network with two/three layers of neurons.
 
 Instead of NN, I will try to use **Logistic Regression** and **SVM** first, to see whether can I get a good result. For the sake of low dimensionality, I might use some **dimension reduction** method to filter the dataset, e.g. **PCA**.
 
@@ -68,19 +66,21 @@ If time permits, I will try to use some **uncommon** methods, such as **random f
 
 ### How to do multi-classification
 
-There are two methods to solve multi-classification problem:
+There are three methods to solve multi-classification problem:
 
-1. 1 vs (k-1) classification, namely, transforming a k-classification problem into k binary classification problem.
+1. 1 vs. (k-1) classification, namely, transforming a k-classification problem into k binary classification problem.
 
-2. 1 vs 1 k-classification classifier, such as **softmax regression** instead of **logistic regression**.
+2. 1 vs. 1 k-classification classifier, such as **softmax regression** instead of **logistic regression**.
 
-3. Error-correcting output-codes, which is an uncommon way to solve multi-classification problem.
+3. Error-correcting output codes, which is an uncommon way to solve multi-classification problem.
 
 ### How to do ETL of the dataset
 
-In order to use k-fold cross validation, I will let open source tool do it. Scikit-learn is a good choice.
+In order to use k-fold cross validation, I will let open source tool do it. Scikit-learn is a good choice. Moreover, I will try to use manual feature expansions such as polynomial expansions, and dimension reduction methods such as PCA and FDA.
 
-### How to do grid search for hyper-parameters
+### How to do the grid search for hyper-parameters
+
+Scikit-learn provides `GridSearchCV` methods to do the search. It is stable for single algorithms. But for pipelined methods, the search space is very large, it may cause OOM.
 
 ### How to choose open source tools
 
@@ -88,7 +88,9 @@ In order to use k-fold cross validation, I will let open source tool do it. Scik
 
 - Scikit-learn seems the most suitable tool, I will try to use ETL part and classification part of it;
 
-- LibSVM and libLinear are much more fast than scikit-learn, but for a demo project, I prefer python, because the scale-out and scale-up capalibities are not my first consideration.
+- MDP (Modular Data Process) is useful for a DAG style data process `Flow`, but scikit-learn also has the similar kind of API called `Pipeline`.
+
+- LibSVM and libLinear are much faster than scikit-learn, but for a demo project, I prefer Python, because the scale-out and scale-up capabilities are not my first consideration.
 
 ## Details
 
@@ -96,9 +98,9 @@ In order to use k-fold cross validation, I will let open source tool do it. Scik
 
 `sudo apt-get install python-sklearn`
 
-I try to use sklearn, with its svm and logistic regression, and get good results.
+I try to use scikit-learn, with its SVM and Logistic Regression, and get good results.
 
-For svm, I get
+For SVM, I get
 
 > \>\>\> print(metrics.classification_report(expected, predicted))
 
@@ -126,7 +128,7 @@ For svm, I get
 
 > avg / total       0.99      0.99      0.99      1912
 
-For logistic regression, I get
+For Logistic Regression, I get
 
 > \>\>\> print(metrics.classification_report(expected, lrpredicted))
 
@@ -192,24 +194,7 @@ print(metrics.classification_report(expected, lrpredicted)))
 
 `sudo aptitude install python-mdp`
 
-To prevent from the warning of the following
-
-> \>\>\> import mdp
-
-> /usr/lib/python2.7/dist-packages/sklearn/pls.py:7: DeprecationWarning: This module has been moved to cross_decomposition and will be removed in 0.16 "removed in 0.16", DeprecationWarning)
-
-We need to force import mdp itself, other than the add-in package of scikit-learn.
-
-`export MDP_DISABLE_SKLEARN=yes`
-
-or 
-
-```python
-import os
-os.environ['MDP_DISABLE_SKLEARN']='yes'
-```
-
-So, let's try something of the **flow**, I love this kind of **pipeline**. Here is the result:
+Let's try something of the **flow**. I love this kind of **pipeline**. Here is the result:
 
 >           precision    recall  f1-score   support
 
@@ -237,7 +222,7 @@ So, let's try something of the **flow**, I love this kind of **pipeline**. Here 
 
 We can see that it is even better than the former SVM result.
 
-Here is the code snippt:
+Here is the code snippet:
 
 ```python
 import mdp
@@ -299,11 +284,11 @@ To testify my assumption, I substitude `SVCScikitLearnNode` with `LogisticRegres
 
 > avg / total       0.99      0.99      0.99      1275
 
-So, in the hand-written digits recognition scenario, logistic regression with some feature expansion and transformation can compete SVM.
+So, in the handwritten digits recognition scenario, logistic regression with some feature expansion and transformation can compete SVM. SVM uses **kernel trick** to substitute the manual feature expansion and transformation.
 
 ### Logistic Regression
 
-Add k-fold cross validation and grid search in lr. Result:
+Add k-fold cross validation and grid search in Logistic Regression. Result:
 
 > Best score: 0.964
 
@@ -335,7 +320,7 @@ Add k-fold cross validation and grid search in lr. Result:
 
 > avg / total       0.96      0.96      0.96      1275
 
-It looks better than the previous LR result.
+It looks better than the previous single Logistic Regression result.
 
 Code snippt:
 
@@ -521,9 +506,9 @@ print(metrics.classification_report(expected, predicted))
 
 ### SVM / LR + GridSearch + CV + Feature Engineering pipeline
 
-### Neural network
+### Neural Network
 
-With the help of RBM and grid cv, I can get the following result on LR:
+With the help of RBM and `GridSearchCV`, I can get the following result on LR. (To use `BernoulliRBM`, we should transform the features into [0,1].)
 
 > Best score: 0.955
 
@@ -559,9 +544,9 @@ With the help of RBM and grid cv, I can get the following result on LR:
 
 > avg / total       0.95      0.95      0.95      1275
 
-It is not very exciting, but it is a good solution. How about we scale up the network an use different grid of parameters? It is worth to try.
+It is not very exciting, but it is a good solution. I also try to use three-layer Neural Network, but the result is not very well.
 
-Code snippt:
+Code snippet:
 
 ```python
 param_grid = {
@@ -585,7 +570,7 @@ n_trains = n_samples / 3 * 2
 grid_search.fit(data[:n_trains], target[:n_trains])
 ```
 
-### Random forest
+### Random Forest
 
 It seems that the '9' is always hard to tell than '0'. How about random forest?
 
@@ -632,7 +617,7 @@ From random forest, I can get my best score here:
 
 ### K Nearest Neighbors
 
-Try to use a non-linear embedding method before knn, but barely no promption.
+I try to use a non-linear embedding method before KNN, but barely no promotion.
 
 ## References
 
