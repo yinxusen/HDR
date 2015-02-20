@@ -14,8 +14,8 @@ There are three kinds of methods that I used:
 
 I put the results as follows, and I will explain them in detail in the following sections, including why I choose them, how to train them, etc.
 
-| Algorithm | Precision Avg | Recall Avg | F-measure Avg |
-|:----------:|:----------:|:----------:|:----------:|
+| Method | Precision Avg | Recall Avg | F-measure Avg | Algorithms |
+|:----------:|:----------:|:----------:|:----------:|:----------:|
 | SVM |
 | Logistic Regression|
 |Pipelined SVM|
