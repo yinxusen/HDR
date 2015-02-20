@@ -1,5 +1,3 @@
-[TOC]
-
 # Classification of Handwritten Digits
 
 ## Summary
