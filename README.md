@@ -21,10 +21,11 @@ I put the results as follows, and I will explain them in detail in the following
 |Pipelined SVM | 0.99 | 0.99 | 0.99 | PCA + Ploynomial Expansions + PCA + FDA + SVM |
 |Pipelined Logistic Regression | 0.99 | 0.99 | 0.99 | PCA + Ploynomial Expansions + PCA + FDA + LR |
 |Random Forest | 0.98 | 0.98 | 0.98 | Single RF + 3-fold CV |
-|Pipelined Random Forest| | |  | Polynomial Expansion + RF + 3-fold CV | 
-|Layered Neural Network| 0.95 | 0.95 | 0.95 | 2-layer RBM + LR + 3-fold CV |
-|K-Nearest Neighbors|
-|Pipelined K-Nearest Neighbors|
+|Pipelined Random Forest | 0.96 | 0.96 | 0.96 | Polynomial Expansion + RF | 
+|Layered Neural Network I | 0.95 | 0.95 | 0.95 | 2-layer RBM + LR + 3-fold CV |
+|Layered Neural Network II | 0.90 | 0.90 | 0.90 | 3-layer RBM + LR + 3-fold CV |
+|Layered Neural Network III | 0.83 | 0.83 | 0.83 | 4-layer RBM + LR + 3-fold CV |
+|K-Nearest Neighbors | 0.98 | 0.98 | 0.98 | single KNN + 3-fold CV |
 
 ## Some statistics
 

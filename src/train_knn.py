@@ -7,7 +7,7 @@ from sklearn.neighbors import KNeighborsClassifier
 digits = numpy.loadtxt(fname="/home/lan/data/rubikloud/optdigits.tra", delimiter=',')
 n_samples = len(digits)
 
-data = digits[:,:-1] / 16.0
+data = digits[:,:-1]
 target = digits[:,-1]
 
 param_grid = {

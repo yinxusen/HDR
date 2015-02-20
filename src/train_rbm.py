@@ -13,12 +13,16 @@ target = digits[:,-1]
 
 param_grid = {
     'rbm1__n_components': [36, 25, 16],
+    'rbm2__n_components': [16],
+    'rbm3__n_components': [9],
     'lr__penalty': ['l2', 'l1'],
     'lr__C': [1, 10, 100]
 }
 
 steps = [
     ('rbm1', BernoulliRBM()), 
+    ('rbm2', BernoulliRBM()), 
+    ('rbm3', BernoulliRBM()), 
     ('lr', LogisticRegression())
 ]
 
