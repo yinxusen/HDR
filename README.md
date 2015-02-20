@@ -1,5 +1,31 @@
 # Task: Classification of hand-written digits
 
+## Summary
+
+In the past few days, I tried to use several classification algorithms (and their combinations) to classify the handwritten digits. For your convenient, I put the summary here, and details in the following sections.
+
+There are three kinds of methods that I used:
+
+- Single algorithms, e.g. SVM and Logistic Regression.
+
+- Ensemble algorithm, i.e. Random Forest.
+
+- Pipelined algorithms.
+
+I put the results as follows, and I will explain them in detail in the following sections, including why I choose them, how to train them, etc.
+
+| Algorithm | Precision Avg | Recall Avg | F-measure Avg |
+|:----------:|:----------:|:----------:|:----------:|
+| SVM |
+| Logistic Regression|
+|Pipelined SVM|
+|Pipelined Logistic Regression|
+|Random Forest|
+|Pipelined Random Forest|
+|Layered Neural Network|
+|K-Nearest Neighbors|
+|Pipelined K-Nearest Neighbors|
+
 ## Some statistics
 
 ### Get the distribution of 0-9 samples
