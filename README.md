@@ -1,3 +1,5 @@
+[TOC]
+
 # Classification of Handwritten Digits
 
 ## Summary
@@ -26,6 +28,12 @@ I put the results as follows, and I will explain them in detail in the following
 |Layered Neural Network II | 0.90 | 0.90 | 0.90 | 3-layer RBM + LR + 3-fold CV |
 |Layered Neural Network III | 0.83 | 0.83 | 0.83 | 4-layer RBM + LR + 3-fold CV |
 |K-Nearest Neighbors | 0.98 | 0.98 | 0.98 | single KNN + 3-fold CV |
+
+## Conclusion
+
+In the handwritten digits recognition scenario, SVM is the best candidate. Logistic regression with manual polynomial expansions can compete with SVM and theoretically, they are very similar. Random forest gets similar result with KNN, because in the *classification superplane* point of view, they are very similar. Both KNN and random forest are able to draw an irregular division surface. I want to use different distance metrics (such as Isomap, MDS) for KNN, in order to find better *neighbors*, but it failed in this scenario. Neural network does not fit my expectation, but it is reasonable. 2-layer RBM plays the *nonlinear tranformation* role, so I get a well enough result. But for 3-layer and 4-layer, I need to fine-tune the parameters with the LR layer to get better results, which scikit-learn does not support that.
+
+# Details
 
 ## Some statistics
 
