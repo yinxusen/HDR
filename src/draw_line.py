@@ -29,17 +29,23 @@ def main(mypath):
     
     # 2. align each stage with its corresponding largest interval
     start_points = fab.groupby(["fname", "State"])["#Time"].agg(np.min)
-    fab["newTime"] = fab[["#Time", "fname", "State"]].apply(lambda row: reIndexTime(row["#Time"], row["fname"], row["State"], start_points, cumsum_intervals), axis=1)
+    fab["newTime"] = fab[["#Time", "fname", "State"]].apply(lambda row: \
+        reIndexTime(row["#Time"], \
+        row["fname"], row["State"], start_points, cumsum_intervals), axis=1)
     
     # 3. print each graph out
     print fab["newTime"].describe()
     print fab["#Time"].describe()
+    print type(fab["newTime"][0])
+    print type(fab["#Time"][0])
+    print fab["newTime"].as_matrix()
     
     #fab["value"] = fab[["Force(g)", "State"]].apply(lambda row: avg[row["State"]], axis=1)
     #
+    #plt.plot(x = fab["newTime"], y = fab["Force(g)"])
     #plt.plot(fab["#Time"], fab["Force(g)"], '--', linewidth=2)
-    ##plt.plot(fab["#Time"], fab["value"], 'r--', linewidth=2)
+    #plt.plot(fab["#Time"], fab["value"], 'r--', linewidth=2)
     #
     #plt.show()
 
-main(sys.argv[1])
+main("/home/sen/data/ATM_Example/tmp")
