@@ -1,6 +1,8 @@
 import sys
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
 from sklearn import datasets, svm, metrics
 from sklearn.grid_search import GridSearchCV
 
@@ -38,10 +40,17 @@ targets = nonnan['para_flag'].values
 
 n_samples = len(targets)
 
-# Create a classifier: a support vector classifier
-classifier = svm.SVC()
+param_grid = {
+    'rf__n_estimators': [40, 50, 60, 70, 80, 90]
+}
 
-grid_search = GridSearchCV(classifier, param_grid, n_jobs = -1, verbose = 1, cv = 3)
+steps = [
+    ('rf', RandomForestClassifier())
+]
+
+pipeline = Pipeline(steps)
+
+grid_search = GridSearchCV(pipeline, param_grid, n_jobs = -1, verbose = 1, cv = 3)
 
 n_trains = n_samples / 3 * 2
 
