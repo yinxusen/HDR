@@ -7,24 +7,21 @@ import numpy as np
 import pandas as pd
 
 def splitData(filename1, filename2):
-    file1 = pd.read_csv("/Users/panda/data/tmp/8513B027.csv", sep = ",", header = 0)
-    file2 = pd.read_csv("/Users/panda/data/tmp/TCBd2.csv", sep = ",", header = 0)
+    file1 = pd.read_csv(filename1, sep = ",", header = 0)
+    file2 = pd.read_csv(filename2, sep = ",", header = 0)
     bond_head1 = file1.merge(file2, left_on="UNIT", right_on="visual_id")
-    bond_head1_tcb1 = bond_head1[bond_head1["BOND_HEAD"] == "TCB1"]
-    bond_head1_tcb1_u1 = bond_head1_tcb1[bond_head1_tcb1["DIE"] == " [8PB]"]
-    res_bin8 = bond_head1_tcb1_u1[bond_head1_tcb1_u1["interface_bin"] == 8]
-    res_binx = bond_head1_tcb1_u1[bond_head1_tcb1_u1["interface_bin"] != 8]
+    res_bin8 = bond_head1[(bond_head1["BOND_HEAD"] == "TCB1") & (bond_head1["DIE"] == " [8PB]") & (bond_head1["interface_bin"] == 8)]
+    res_binx = bond_head1[(bond_head1["BOND_HEAD"] == "TCB1") & (bond_head1["DIE"] == " [8PB]") & (bond_head1["interface_bin"] != 8)]
     #res_bin8_sm = res_bin8[res_bin8["substrate_vendor"] == "SM"]
     #res_bin8_sh = res_bin8[res_bin8["substrate_vendor"] == "SH"]
     #res_binx_sm = res_binx[res_binx["substrate_vendor"] == "SM"]
     #res_binx_sh = res_binx[res_binx["substrate_vendor"] == "SH"]
-    #return (res_bin8_sm, res_bin8_sh, res_binx_sm, res_binx_sh)
     return (res_bin8, res_binx)
 
 def plotCompare(filename1, filename2):
     a, b = splitData(filename1, filename2)
-    plt.plot(b["#Time"], b["HeightCmd(um)"], "r--", linewidth=2)
-    plt.plot(a["#Time"], a["HeightCmd(um)"], "--", linewidth=2)
+    plt.plot(b["#Time"], b["Force(g)"], "r--", linewidth=2)
+    plt.plot(a["#Time"], a["Force(g)"], "--", linewidth=2)
     plt.show()
 
 def reIndexTime(oriTime, fname, state, dictOfOriStartPoints, dictOfNewStartPoints):
@@ -61,4 +58,4 @@ def main(mypath, content):
     plt.show()
 
 #main("/Users/panda/data/tmp", sys.argv[1])
-plotCompare("/Users/panda/data/tmp/8513B027.csv", "/Users/panda/data/tmp/TCBd.csv")
+plotCompare("/Users/panda/data/tmp/8513B027.csv", "/Users/panda/data/tmp/TCBd2.csv")
