@@ -57,6 +57,11 @@ def readDirOfLogFiles(myPath):
 
     return data
 
+def saveFig(plt, fname, dpi):
+    figure = plt.gcf()
+    figure.set_size_inches(10000/dpi, 1000/dpi)
+    plt.savefig(fname, dpi=dpi)
+
 def main(attr):
     filename1 = "/Users/panda/data/tmp/8513B027.csv"
     filename2 = "/Users/panda/data/tmp/TCBd2.csv"
@@ -65,11 +70,17 @@ def main(attr):
     newTime = alignIntervals(data, cumsumIntervals)
     data["newTime"] = newTime
     badBin, goodBin = splitData(data)
+    print len(badBin)
+    print len(goodBin)
     
-    plt.scatter(goodBin["newTime"], goodBin[attr])
-    plt.scatter(badBin["newTime"], badBin[attr])
+    #plt.scatter(badBin["newTime"], badBin[attr], c="r", s=1)
+    plt.scatter(goodBin["newTime"], goodBin[attr], c="b", s=1)
     for v in cumsumIntervals:
         plt.axvline(v)
-    plt.show()
+    saveFig(plt, "good.png", 100)
+    #plt.scatter(badBin["newTime"], badBin[attr], c="r", s=1)
+    #for v in cumsumIntervals:
+    #    plt.axvline(v)
+    #saveFig(plt, "bad.png", 100)
 
 main("Force(g)")
